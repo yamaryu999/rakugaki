@@ -60,7 +60,7 @@ const ARController = () => {
 
     return (
         <>
-            {/* Visual Reticle */}
+            {/* Visual Reticle - Chalk Circle */}
             {isPresenting && (
                 <mesh ref={reticleRef} rotation-x={-Math.PI / 2}>
                     <ringGeometry args={[0.15, 0.2, 32]} />
@@ -90,23 +90,23 @@ const ARScene: React.FC = () => {
     const doodles = useAppStore((state) => state.doodles);
 
     return (
-        <div className="w-full h-full relative font-outfit">
+        <div className="w-full h-full relative font-hand">
             {/* AR Button Container - Top Right */}
             <div className="absolute top-4 right-4 z-50 pt-safe">
                 <ARButton
                     style={{
                         position: 'static',
-                        padding: '10px 20px',
-                        borderRadius: '9999px',
-                        background: 'linear-gradient(to right, #6366f1, #a855f7, #ec4899)',
+                        padding: '12px 20px',
+                        borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+                        background: '#FF6B6B',
                         color: 'white',
-                        fontWeight: '800',
+                        fontWeight: 'bold',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
-                        boxShadow: '0 10px 20px -5px rgba(168, 85, 247, 0.5)',
-                        border: '2px solid rgba(255,255,255,0.4)',
-                        fontSize: '12px',
-                        backdropFilter: 'blur(8px)',
+                        boxShadow: '2px 2px 0px rgba(0,0,0,0.3)',
+                        border: '2px solid white',
+                        fontSize: '14px',
+                        transform: 'rotate(-2deg)'
                     }}
                 >
                     Start Camera
@@ -127,20 +127,25 @@ const ARScene: React.FC = () => {
                 </XR>
             </Canvas>
 
-            {/* Back Button - Top Left (Floating White Circle) */}
+            {/* Back Button - Top Left (Organic Sticker) */}
             <div className="absolute top-4 left-4 z-10 pt-safe pointer-events-none">
                 <button
                     onClick={() => setMode('drawing')}
-                    className="pointer-events-auto w-12 h-12 bg-white rounded-full text-slate-900 font-bold shadow-soft active:scale-95 transition-transform flex items-center justify-center border border-white/50"
+                    className="pointer-events-auto w-12 h-12 bg-white rounded-full text-[#2D2D2D] font-bold shadow-md active:scale-95 transition-transform flex items-center justify-center border-2 border-[#2D2D2D] transform rotate-3 hover:rotate-0"
+                    style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }}
                 >
                     <span className="text-xl">←</span>
                 </button>
             </div>
 
-            {/* Instructions - Bottom Floating Pill (Dark Glass) */}
+            {/* Instructions - Sticky Note */}
             <div className="absolute bottom-12 w-full text-center pointer-events-none z-10 px-4">
-                <div className="inline-block px-6 py-3 bg-black/60 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl">
-                    <p className="text-white font-bold text-sm tracking-wide">👇 Tap surface to place!</p>
+                <div className="inline-block px-6 py-3 bg-[#FFD93D] text-[#2D2D2D] border-2 border-[#E5C32E] shadow-lg transform rotate-1"
+                    style={{
+                        clipPath: 'polygon(0% 0%, 100% 0%, 100% 90%, 95% 100%, 0% 100%)' // Dog ear
+                    }}
+                >
+                    <p className="font-bold text-lg tracking-wide">👇 Tap to stick it!</p>
                 </div>
             </div>
         </div>

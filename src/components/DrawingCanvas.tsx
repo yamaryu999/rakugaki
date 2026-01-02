@@ -44,8 +44,8 @@ const DrawingCanvas: React.FC = () => {
         ctx.moveTo(x, y);
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = '#334155'; // Slate-700
+        ctx.lineWidth = 4; // Slightly thinner for "pen" feel
+        ctx.strokeStyle = '#2D2D2D'; // Pencil Black
     };
 
     const draw = (e: React.MouseEvent | React.TouchEvent) => {
@@ -97,7 +97,6 @@ const DrawingCanvas: React.FC = () => {
         if (!canvas) return;
         const dataUrl = canvas.toDataURL('image/png');
         saveDrawing(dataUrl);
-        // Toast notification could go here
     };
 
     const handleLoad = (dataUrl: string) => {
@@ -137,7 +136,7 @@ const DrawingCanvas: React.FC = () => {
     };
 
     return (
-        <div className="relative w-full h-full bg-slate-50 overflow-hidden font-outfit">
+        <div className="relative w-full h-full bg-[#FFFBF0] overflow-hidden font-hand">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -158,108 +157,137 @@ const DrawingCanvas: React.FC = () => {
                 onTouchEnd={stopDrawing}
             />
 
-            {/* === UNIFIED FLOATING CAPSULE === */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20 pointer-events-none pb-safe animate-float">
-                <div className="capsule-bar flex items-center gap-1 shadow-soft pointer-events-auto bg-white/95 backdrop-blur-xl border border-white/40 ring-1 ring-black/5">
+            {/* === PENCIL CASE (Note: Using organic shapes) === */}
+            <div className="absolute bottom-6 left-0 right-0 flex justify-center z-20 pointer-events-none pb-safe">
+                <div
+                    className="flex items-center gap-3 px-4 py-3 bg-white pointer-events-auto border-sketch transform -rotate-1 shadow-lg"
+                    style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+                >
 
                     {/* Left: Utilities */}
                     <button
                         onClick={() => setShowGallery(true)}
-                        className="w-12 h-12 rounded-full hover:bg-slate-100 flex items-center justify-center text-xl text-slate-600 btn-bouncy relative"
+                        className="w-10 h-10 flex items-center justify-center text-xl text-gray-700 animate-wobble hover:text-orange-500 transition-colors"
+                        title="My Sketchbook"
                     >
-                        📂
-                        {savedDrawings.length > 0 && (
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-400 rounded-full border border-white"></span>
-                        )}
+                        📒
                     </button>
 
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-12 h-12 rounded-full hover:bg-slate-100 flex items-center justify-center text-xl text-slate-600 btn-bouncy"
+                        className="w-10 h-10 flex items-center justify-center text-xl text-gray-700 animate-wobble hover:text-blue-500 transition-colors"
+                        title="Import"
                     >
-                        📷
+                        📥
                     </button>
 
-                    {/* Center: PRIMARY AR ACTION */}
-                    <div className="px-2">
+                    <div className="w-0.5 h-8 bg-gray-200 mx-1 transform rotate-6"></div>
+
+                    {/* Center: PRIMARY AR ACTION - "STICKER" */}
+                    <div className="relative -top-2">
                         <button
                             onClick={handleEnterAR}
-                            className="h-14 px-8 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-extrabold text-lg shadow-lg shadow-purple-500/30 btn-bouncy flex items-center gap-2 hover:brightness-110"
+                            className="bg-[#FF6B6B] text-white font-bold text-xl px-4 py-3 shadow-[3px_3px_0px_rgba(0,0,0,0.2)] transform hover:-translate-y-1 active:translate-y-0 active:shadow-none transition-all flex flex-col items-center border-2 border-dashed border-white/50"
+                            style={{
+                                clipPath: 'polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 10%)',
+                                borderRadius: '4px'
+                            }}
                         >
-                            <span>🚀</span>
-                            <span className="tracking-widest text-sm">GO AR</span>
+                            <span className="text-2xl drop-shadow-sm">🚀</span>
+                            <span className="text-xs font-bold uppercase tracking-wider mt-1">Go AR!</span>
                         </button>
                     </div>
+
+                    <div className="w-0.5 h-8 bg-gray-200 mx-1 transform -rotate-3"></div>
 
                     {/* Right: Canvas Actions */}
                     <button
                         onClick={handleClear}
-                        className="w-12 h-12 rounded-full hover:bg-red-50 flex items-center justify-center text-xl text-slate-400 hover:text-red-500 btn-bouncy transition-colors"
+                        className="w-10 h-10 flex items-center justify-center text-xl text-gray-700 animate-wobble hover:text-red-500 transition-colors"
+                        title="Erase"
                     >
-                        🗑️
+                        🧹
                     </button>
 
                     <button
                         onClick={handleSave}
-                        className="w-12 h-12 rounded-full hover:bg-emerald-50 flex items-center justify-center text-xl text-slate-400 hover:text-emerald-500 btn-bouncy transition-colors"
+                        className="w-10 h-10 flex items-center justify-center text-xl text-gray-700 animate-wobble hover:text-green-500 transition-colors"
+                        title="Keep It"
                     >
-                        💾
+                        📌
                     </button>
                 </div>
             </div>
 
-            {/* Top Text (Minimal) */}
-            <div className="absolute top-6 left-0 right-0 text-center pointer-events-none pt-safe opacity-30">
-                <h1 className="font-outfit font-black text-2xl tracking-tight text-slate-900 uppercase">Rakugaki</h1>
+            {/* Top Text (Handwritten Title) */}
+            <div className="absolute top-6 left-6 pointer-events-none pt-safe transform -rotate-2">
+                <h1 className="font-hand font-bold text-3xl text-[#2D2D2D] tracking-wide relative inline-block">
+                    Rakugaki
+                    <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#FFD93D] -z-10 rounded-sm transform skew-x-12 opacity-50"></span>
+                </h1>
             </div>
 
 
-            {/* === MODERN GALLERY OVERLAY === */}
+            {/* === SKETCHBOOK OVERLAY === */}
             {showGallery && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-6 animate-fade-in bg-slate-900/20 backdrop-blur-sm">
-                    {/* Card Container */}
-                    <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md h-[70vh] flex flex-col overflow-hidden relative border border-white/50 ring-1 ring-black/5">
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-6 animate-fade-in bg-[#2D2D2D]/80 backdrop-blur-sm">
+                    {/* Sketchbook Page */}
+                    <div className="bg-white w-full max-w-lg h-[75vh] flex flex-col relative shadow-2xl paper-sheet transform rotate-1 overflow-visible">
 
-                        {/* Header */}
-                        <div className="p-6 flex justify-between items-center bg-white/50 backdrop-blur-md z-10 sticky top-0">
+                        {/* Spiral Binding Visuals */}
+                        <div className="absolute -left-3 top-0 bottom-0 flex flex-col justify-evenly">
+                            {[...Array(10)].map((_, i) => (
+                                <div key={i} className="w-8 h-4 bg-gray-300 rounded-full border border-gray-400 shadow-sm relative z-0"></div>
+                            ))}
+                        </div>
+
+                        {/* App Header */}
+                        <div className="p-6 pb-2 flex justify-between items-center border-b-2 border-dashed border-gray-200">
                             <div>
-                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">Your Gallery</h2>
-                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider">{savedDrawings.length} Creations</p>
+                                <h2 className="text-3xl font-bold text-gray-800">My Sketches</h2>
+                                <p className="text-gray-500 text-sm">Tap to load, or tear out to delete.</p>
                             </div>
                             <button
                                 onClick={() => setShowGallery(false)}
-                                className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 btn-bouncy font-bold"
+                                className="w-10 h-10 rounded-full border-2 border-gray-800 text-gray-800 flex items-center justify-center text-xl hover:bg-gray-100 transition-colors font-bold"
                             >
                                 ✕
                             </button>
                         </div>
 
-                        {/* Bento Grid */}
-                        <div className="flex-1 overflow-y-auto p-6 pt-0">
+                        {/* Content */}
+                        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
                             {savedDrawings.length === 0 ? (
-                                <div className="h-full flex flex-col items-center justify-center text-slate-300">
-                                    <span className="text-6xl mb-4 grayscale opacity-50">🎨</span>
-                                    <p className="font-semibold">Gallery is Empty</p>
+                                <div className="h-full flex flex-col items-center justify-center text-gray-400">
+                                    <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
+                                        <span className="text-6xl grayscale opacity-50">✏️</span>
+                                    </div>
+                                    <p className="font-bold text-xl mt-4 transform rotate-1">Blank Page...</p>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-2 gap-4 auto-rows-fr">
+                                <div className="grid grid-cols-2 gap-6">
                                     {savedDrawings.map((img, idx) => (
                                         <div
                                             key={idx}
-                                            className="group relative rounded-3xl overflow-hidden aspect-square bg-slate-50 shadow-sm border border-slate-100 btn-bouncy cursor-pointer"
+                                            className="group relative bg-white p-2 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all transform hover:rotate-2 cursor-pointer"
                                             onClick={() => handleLoad(img)}
+                                            style={{
+                                                transform: `rotate(${idx % 2 === 0 ? '-2deg' : '1deg'})`
+                                            }}
                                         >
-                                            {/* Grid Pattern Background */}
-                                            <div className="absolute inset-0 bg-grid-pattern opacity-50" />
+                                            {/* Tape Visual */}
+                                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-20 h-6 bg-[#FFFFE0] opacity-80 shadow-sm rotate-1 z-10"></div>
 
-                                            <img src={img} className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110" />
+                                            <div className="aspect-square border border-gray-100 overflow-hidden relative">
+                                                <img src={img} className="w-full h-full object-contain" />
+                                            </div>
 
-                                            {/* Delete Overlay */}
+                                            {/* Delete (Red X) */}
                                             <button
-                                                className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur text-red-500 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                                                className="absolute -bottom-2 -right-2 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110 border-2 border-white"
                                                 onClick={(e) => { e.stopPropagation(); deleteDrawing(idx); }}
                                             >
-                                                🗑️
+                                                ✕
                                             </button>
                                         </div>
                                     ))}
