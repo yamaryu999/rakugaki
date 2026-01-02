@@ -21,10 +21,6 @@ const DrawingCanvas: React.FC = () => {
         if (!canvas) return;
 
         const resizeValues = () => {
-            // Need to save content before resizing if we want to preserve it?
-            // For now, simple resize clears canvas, which is standard simple behavior.
-            // But to be nice, we could save/restore.
-            // Let's keep it simple as per prompt requirements.
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
@@ -141,7 +137,7 @@ const DrawingCanvas: React.FC = () => {
     };
 
     return (
-        <div className="relative w-full h-screen bg-white overflow-hidden">
+        <div className="relative w-full h-full bg-slate-50 overflow-hidden font-sans">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -152,7 +148,7 @@ const DrawingCanvas: React.FC = () => {
 
             <canvas
                 ref={canvasRef}
-                className="block touch-none cursor-crosshair"
+                className="block touch-none cursor-crosshair w-full h-full absolute inset-0 z-0 bg-white"
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
@@ -162,99 +158,135 @@ const DrawingCanvas: React.FC = () => {
                 onTouchEnd={stopDrawing}
             />
 
-            {/* Top Glass Bar: Utilities */}
-            <div className="absolute top-4 left-4 right-4 flex justify-between items-center bg-white/70 backdrop-blur-md border border-white/50 shadow-lg rounded-2xl p-2 pt-safe z-10 mx-auto max-w-lg">
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setShowGallery(true)}
-                        className="p-3 bg-gray-100/50 hover:bg-white text-gray-700 rounded-xl transition-all active:scale-95"
-                        title="Gallery"
-                    >
-                        <span className="text-xl">📁</span>
-                    </button>
-                    <button
-                        onClick={() => fileInputRef.current?.click()}
-                        className="p-3 bg-gray-100/50 hover:bg-white text-gray-700 rounded-xl transition-all active:scale-95"
-                        title="Upload"
-                    >
-                        <span className="text-xl">📷</span>
-                    </button>
+            {/* === HEADER === */}
+            <div className="absolute top-0 left-0 right-0 p-4 pt-safe z-10 flex justify-between items-start pointer-events-none">
+                {/* Logo / Title */}
+                <div className="glass-panel px-4 py-2 rounded-full pointer-events-auto shadow-sm">
+                    <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 text-sm tracking-widest uppercase">
+                        RAKUGAKI
+                    </span>
                 </div>
 
-                <h1 className="text-gray-400 font-bold tracking-widest text-xs uppercase hidden sm:block">3D Doodle AR</h1>
-
-                <div className="flex gap-2">
-                    <button
-                        onClick={handleClear}
-                        className="p-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-xl transition-all active:scale-95"
-                        title="Clear"
-                    >
-                        <span className="text-xl">🗑️</span>
-                    </button>
-                    <button
-                        onClick={handleSave}
-                        className="p-3 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all active:scale-95"
-                        title="Save"
-                    >
-                        <span className="text-xl">💾</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Bottom: Enter AR (Main CTA) */}
-            <div className="absolute bottom-10 left-0 right-0 flex justify-center pb-safe pointer-events-none z-10">
+                {/* Gallery Bundle */}
                 <button
-                    onClick={handleEnterAR}
-                    className="pointer-events-auto px-10 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-full font-black text-xl shadow-2xl shadow-purple-500/30 active:scale-95 hover:scale-105 transition-all ring-4 ring-white/30 backdrop-blur-sm"
+                    onClick={() => setShowGallery(true)}
+                    className="glass-button px-4 py-2 rounded-full pointer-events-auto shadow-sm flex items-center gap-2 group"
                 >
-                    ✨ ENTER AR WORLD
+                    <span className="text-xl group-hover:scale-110 transition-transform">📁</span>
+                    <span className="text-gray-600 font-bold text-sm">Gallery</span>
+                    {savedDrawings.length > 0 && (
+                        <span className="bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm">
+                            {savedDrawings.length}
+                        </span>
+                    )}
                 </button>
             </div>
 
-            <div className="absolute bottom-4 left-4 pointer-events-none pb-safe">
-                <p className="text-gray-400 text-sm">Draw something!</p>
+            {/* === BOTTOM DOCK === */}
+            <div className="absolute bottom-6 left-4 right-4 z-20 pb-safe pointer-events-none flex justify-center items-end">
+                <div className="glass-panel px-6 py-4 rounded-3xl shadow-xl flex items-center gap-8 pointer-events-auto">
+                    {/* Left Tools */}
+                    <div className="flex gap-4">
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex flex-col items-center gap-1 group w-12"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg shadow-sm group-active:scale-95 transition-transform border border-purple-100">
+                                📷
+                            </div>
+                            <span className="text-[10px] text-gray-500 font-medium">Add</span>
+                        </button>
+                        <button
+                            onClick={handleClear}
+                            className="flex flex-col items-center gap-1 group w-12"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-lg shadow-sm group-active:scale-95 transition-transform border border-red-100">
+                                🗑️
+                            </div>
+                            <span className="text-[10px] text-gray-500 font-medium">Clear</span>
+                        </button>
+                    </div>
+
+                    {/* HERO ACTION: AR FAB */}
+                    <div className="relative -top-8">
+                        <div className="absolute inset-0 rounded-full animate-pulse-ring"></div>
+                        <button
+                            onClick={handleEnterAR}
+                            className="w-20 h-20 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white shadow-2xl flex items-center justify-center flex-col transform active:scale-95 transition-all hover:-translate-y-1 relative z-10 border-4 border-white/50"
+                        >
+                            <span className="text-3xl filter drop-shadow-md">🚀</span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider mt-1">GO AR</span>
+                        </button>
+                    </div>
+
+                    {/* Right Tools */}
+                    <div className="flex gap-4">
+                        <button
+                            onClick={handleSave}
+                            className="flex flex-col items-center gap-1 group w-12"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg shadow-sm group-active:scale-95 transition-transform border border-green-100">
+                                💾
+                            </div>
+                            <span className="text-[10px] text-gray-500 font-medium">Save</span>
+                        </button>
+                        {/* Placeholder for symmetry or future feature */}
+                        <div className="w-12"></div>
+                    </div>
+                </div>
             </div>
 
-            {/* Gallery Modal */}
+            {/* === GALLERY SHEET (DRAWER) === */}
             {showGallery && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white/90 backdrop-blur-xl border border-white/50 rounded-3xl w-full max-w-lg max-h-[80vh] flex flex-col shadow-2xl overflow-hidden pb-safe">
-                        <div className="p-4 flex justify-between items-center border-b border-gray-100">
-                            <h2 className="text-xl font-black text-gray-800 tracking-tight">📁 My Gallery</h2>
+                <div className="absolute inset-0 z-50 flex flex-col justify-end pointer-events-none">
+                    {/* Backdrop */}
+                    <div
+                        className="absolute inset-0 bg-black/40 backdrop-blur-sm pointer-events-auto transition-opacity duration-300"
+                        onClick={() => setShowGallery(false)}
+                    ></div>
+
+                    {/* Sheet */}
+                    <div className="bg-slate-50 rounded-t-[2.5rem] p-6 shadow-2xl h-[75vh] w-full pointer-events-auto animate-slide-up relative flex flex-col">
+                        {/* Drag Handle (Visual only) */}
+                        <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-6"></div>
+
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-black text-gray-800">Your Artworks</h2>
                             <button
-                                className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
                                 onClick={() => setShowGallery(false)}
+                                className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold"
                             >
                                 ✕
                             </button>
                         </div>
 
-                        <div className="p-4 overflow-y-auto flex-1">
+                        <div className="overflow-y-auto flex-1 pb-safe">
                             {savedDrawings.length === 0 ? (
-                                <div className="text-center py-20 text-gray-400">
-                                    <p className="text-4xl mb-2">🎨</p>
-                                    <p>No drawings yet.</p>
-                                    <p className="text-xs mt-2">Draw something and hit save!</p>
+                                <div className="text-center py-20 opacity-50 flex flex-col items-center">
+                                    <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl mb-4">🎨</div>
+                                    <p className="text-lg font-medium text-gray-800">Empty Gallery</p>
+                                    <p className="text-sm text-gray-500">Create new masterpieces to save them here.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 gap-4">
                                     {savedDrawings.map((img, idx) => (
-                                        <div key={idx} className="group relative bg-white rounded-2xl overflow-hidden aspect-square border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                                            <div
-                                                className="absolute inset-0 bg-gray-50 pattern-grid-lg"
-                                                style={{ backgroundImage: 'radial-gradient(#e5e7eb 1px, transparent 1px)', backgroundSize: '10px 10px' }}
-                                            />
-                                            <img
-                                                src={img}
-                                                className="absolute inset-0 w-full h-full object-contain p-2 cursor-pointer transition-transform group-hover:scale-105"
-                                                onClick={() => handleLoad(img)}
-                                            />
-                                            <button
-                                                className="absolute top-2 right-2 bg-white/80 hover:bg-red-50 text-red-500 w-8 h-8 rounded-full flex items-center justify-center shadow-sm backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-                                                onClick={(e) => { e.stopPropagation(); deleteDrawing(idx); }}
-                                            >
-                                                🗑️
-                                            </button>
+                                        <div key={idx} className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 relative group overflow-hidden">
+                                            <div className="aspect-square rounded-xl overflow-hidden bg-gray-50 relative cursor-pointer" onClick={() => handleLoad(img)}>
+                                                <div
+                                                    className="absolute inset-0"
+                                                    style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '8px 8px' }}
+                                                />
+                                                <img src={img} className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110" />
+                                            </div>
+                                            <div className="flex justify-between items-center mt-3 px-1">
+                                                <span className="text-xs font-bold text-gray-400">#{savedDrawings.length - idx}</span>
+                                                <button
+                                                    className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-full hover:bg-red-100 transition-colors"
+                                                    onClick={(e) => { e.stopPropagation(); deleteDrawing(idx); }}
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
