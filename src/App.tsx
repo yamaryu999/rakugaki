@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore } from './store';
 import DrawingCanvas from './components/DrawingCanvas';
 import ARScene from './components/ARScene';
