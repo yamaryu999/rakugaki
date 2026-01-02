@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { XR, useHitTest, useXR } from '@react-three/xr';
+import { XR, useHitTest, useXR, ARButton } from '@react-three/xr';
 import { Billboard, Plane, useTexture } from '@react-three/drei';
 import { Vector3, Quaternion, Euler } from 'three';
 import { useAppStore } from '../store';
@@ -89,18 +89,20 @@ const ARScene: React.FC = () => {
     const textureData = useAppStore((state) => state.textureData);
     const doodles = useAppStore((state) => state.doodles);
 
-    // Use useState to suppress unused variable warning if needed, 
-    // or just use it. Here we used it in imports but not body? 
-    // Actually we use useState in imports but not in component body in previous version.
-    // Let's remove unused imports from the top if not used.
-    // We use useState nowhere in ARScene component itself, only in imported hooks or subcomponents?
-    // ARController uses nothing from useState? 
-    // Actually ARController uses no useState.
-    // ARScene uses no useState.
-    // So remove useState from imports.
-
     return (
-        <div className="w-full h-screen relative">
+        <div className="w-full h-screen relative bg-black">
+            {/* Native WebXR Button is required to start session cleanly */}
+            <ARButton
+                sessionInit={{
+                    requiredFeatures: ['hit-test'],
+                    optionalFeatures: ['dom-overlay'],
+                    domOverlay: { root: document.body }
+                }}
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-4 bg-blue-600 text-white rounded-full font-bold shadow-lg z-50 !important"
+            >
+                Start Camera
+            </ARButton>
+
             <Canvas>
                 <XR>
                     <ambientLight intensity={1} />
@@ -123,7 +125,9 @@ const ARScene: React.FC = () => {
                     ← Back to Drawing
                 </button>
             </div>
-            <div className="absolute bottom-10 w-full text-center pointer-events-none">
+
+            {/* Guide Text - Hidden until AR starts ideally, but let's keep it simple */}
+            <div className="absolute bottom-10 w-full text-center pointer-events-none z-10">
                 <p className="text-white text-sm bg-black/30 inline-block px-2 rounded">Find a surface and tap to place!</p>
             </div>
         </div>
