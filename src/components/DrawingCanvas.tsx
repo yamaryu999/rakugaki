@@ -14,6 +14,8 @@ const DrawingCanvas: React.FC = () => {
     const saveDrawing = useAppStore((state) => state.saveDrawing);
     const deleteDrawing = useAppStore((state) => state.deleteDrawing);
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -111,14 +113,43 @@ const DrawingCanvas: React.FC = () => {
         const img = new Image();
         img.onload = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
+            // Center and fit
+            const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+            const w = img.width * scale;
+            const h = img.height * scale;
+            const x = (canvas.width - w) / 2;
+            const y = (canvas.height - h) / 2;
+            ctx.drawImage(img, x, y, w, h);
         };
         img.src = dataUrl;
         setShowGallery(false);
     };
 
+    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const result = event.target?.result as string;
+            if (result) handleLoad(result);
+        };
+        reader.readAsDataURL(file);
+
+        // Reset input so same file can be selected again if needed
+        e.target.value = '';
+    };
+
     return (
         <div className="relative w-full h-screen bg-white overflow-hidden">
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleUpload}
+                accept="image/*"
+                className="hidden"
+            />
+
             <canvas
                 ref={canvasRef}
                 className="block touch-none cursor-crosshair"
@@ -131,13 +162,19 @@ const DrawingCanvas: React.FC = () => {
                 onTouchEnd={stopDrawing}
             />
 
-            {/* Top Buttons: Gallery (Left) | Actions (Right) */}
-            <div className="absolute top-4 left-4 pt-safe pointer-events-none z-10">
+            {/* Top Buttons: Gallery/Upload (Left) | Actions (Right) */}
+            <div className="absolute top-4 left-4 flex gap-2 pt-safe pointer-events-none z-10">
                 <button
                     onClick={() => setShowGallery(true)}
                     className="pointer-events-auto px-4 py-2 bg-yellow-400 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
                 >
                     📁 Gallery
+                </button>
+                <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="pointer-events-auto px-4 py-2 bg-purple-500 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
+                >
+                    📷 Upload
                 </button>
             </div>
 
