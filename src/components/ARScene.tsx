@@ -90,25 +90,23 @@ const ARScene: React.FC = () => {
     const doodles = useAppStore((state) => state.doodles);
 
     return (
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative font-outfit">
             {/* AR Button Container - Top Right */}
-            <div className="absolute top-4 right-4 z-50 pt-safe font-sans">
+            <div className="absolute top-4 right-4 z-50 pt-safe">
                 <ARButton
                     style={{
                         position: 'static',
-                        padding: '12px 24px',
+                        padding: '10px 20px',
                         borderRadius: '9999px',
-                        background: 'linear-gradient(to right, #6366f1, #a855f7, #ec4899)', // indigo-500 -> purple-500 -> pink-500
+                        background: 'linear-gradient(to right, #6366f1, #a855f7, #ec4899)',
                         color: 'white',
-                        fontWeight: '800', // Extra bold
+                        fontWeight: '800',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
-                        boxShadow: '0 10px 15px -3px rgba(168, 85, 247, 0.4)',
-                        border: '2px solid rgba(255,255,255,0.3)',
-                        fontSize: '14px',
-                        width: 'auto',
-                        height: 'auto',
-                        backdropFilter: 'blur(4px)',
+                        boxShadow: '0 10px 20px -5px rgba(168, 85, 247, 0.5)',
+                        border: '2px solid rgba(255,255,255,0.4)',
+                        fontSize: '12px',
+                        backdropFilter: 'blur(8px)',
                     }}
                 >
                     Start Camera
@@ -129,18 +127,20 @@ const ARScene: React.FC = () => {
                 </XR>
             </Canvas>
 
+            {/* Back Button - Top Left (Floating White Circle) */}
             <div className="absolute top-4 left-4 z-10 pt-safe pointer-events-none">
                 <button
                     onClick={() => setMode('drawing')}
-                    className="pointer-events-auto px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full font-bold shadow-lg active:scale-95 transition-all hover:bg-white/20 flex items-center gap-2"
+                    className="pointer-events-auto w-12 h-12 bg-white rounded-full text-slate-900 font-bold shadow-soft active:scale-95 transition-transform flex items-center justify-center border border-white/50"
                 >
-                    <span>←</span> <span className="text-sm">Back</span>
+                    <span className="text-xl">←</span>
                 </button>
             </div>
 
+            {/* Instructions - Bottom Floating Pill (Dark Glass) */}
             <div className="absolute bottom-12 w-full text-center pointer-events-none z-10 px-4">
-                <div className="inline-block px-6 py-3 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
-                    <p className="text-white font-medium text-sm">👇 Tap any surface to place your art!</p>
+                <div className="inline-block px-6 py-3 bg-black/60 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl">
+                    <p className="text-white font-bold text-sm tracking-wide">👇 Tap surface to place!</p>
                 </div>
             </div>
         </div>
