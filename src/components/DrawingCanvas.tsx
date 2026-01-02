@@ -191,9 +191,13 @@ const DrawingCanvas: React.FC = () => {
                 >
                     Save
                 </button>
+            </div>
+
+            {/* Bottom: Enter AR (Main Action) */}
+            <div className="absolute bottom-8 left-0 right-0 flex justify-center pb-safe pointer-events-none z-10">
                 <button
                     onClick={handleEnterAR}
-                    className="pointer-events-auto px-4 py-2 bg-blue-600 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
+                    className="pointer-events-auto px-8 py-4 bg-blue-600 text-white rounded-full font-bold text-lg shadow-lg active:scale-95 transition-transform ring-4 ring-blue-200"
                 >
                     Enter AR
                 </button>
