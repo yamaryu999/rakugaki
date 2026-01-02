@@ -95,7 +95,7 @@ const ARScene: React.FC = () => {
                 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-4 bg-blue-600 text-white rounded-full font-bold shadow-lg z-50"
             />
 
-            <Canvas>
+            <Canvas gl={{ alpha: true }}>
                 <XR>
                     <ambientLight intensity={1} />
                     <ARController />
