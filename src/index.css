@@ -4,8 +4,19 @@
 
 body {
   margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100dvh;
   overflow: hidden;
-  /* Prevent scrolling for canvas apps */
+  touch-action: none;
+  /* Prevent browser gestures */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
 }
 
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
