@@ -162,44 +162,52 @@ const DrawingCanvas: React.FC = () => {
                 onTouchEnd={stopDrawing}
             />
 
-            {/* Top Buttons: Gallery/Upload (Left) | Actions (Right) */}
-            <div className="absolute top-4 left-4 flex gap-2 pt-safe pointer-events-none z-10">
-                <button
-                    onClick={() => setShowGallery(true)}
-                    className="pointer-events-auto px-4 py-2 bg-yellow-400 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
-                >
-                    📁 Gallery
-                </button>
-                <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="pointer-events-auto px-4 py-2 bg-purple-500 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
-                >
-                    📷 Upload
-                </button>
+            {/* Top Glass Bar: Utilities */}
+            <div className="absolute top-4 left-4 right-4 flex justify-between items-center bg-white/70 backdrop-blur-md border border-white/50 shadow-lg rounded-2xl p-2 pt-safe z-10 mx-auto max-w-lg">
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setShowGallery(true)}
+                        className="p-3 bg-gray-100/50 hover:bg-white text-gray-700 rounded-xl transition-all active:scale-95"
+                        title="Gallery"
+                    >
+                        <span className="text-xl">📁</span>
+                    </button>
+                    <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="p-3 bg-gray-100/50 hover:bg-white text-gray-700 rounded-xl transition-all active:scale-95"
+                        title="Upload"
+                    >
+                        <span className="text-xl">📷</span>
+                    </button>
+                </div>
+
+                <h1 className="text-gray-400 font-bold tracking-widest text-xs uppercase hidden sm:block">3D Doodle AR</h1>
+
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleClear}
+                        className="p-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-xl transition-all active:scale-95"
+                        title="Clear"
+                    >
+                        <span className="text-xl">🗑️</span>
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        className="p-3 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all active:scale-95"
+                        title="Save"
+                    >
+                        <span className="text-xl">💾</span>
+                    </button>
+                </div>
             </div>
 
-            <div className="absolute top-4 right-4 flex gap-2 pointer-events-none pt-safe z-10">
-                <button
-                    onClick={handleClear}
-                    className="pointer-events-auto px-4 py-2 bg-red-100 text-red-600 rounded-full font-bold shadow-md active:scale-95 transition-transform"
-                >
-                    Clear
-                </button>
-                <button
-                    onClick={handleSave}
-                    className="pointer-events-auto px-4 py-2 bg-green-500 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
-                >
-                    Save
-                </button>
-            </div>
-
-            {/* Bottom: Enter AR (Main Action) */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center pb-safe pointer-events-none z-10">
+            {/* Bottom: Enter AR (Main CTA) */}
+            <div className="absolute bottom-10 left-0 right-0 flex justify-center pb-safe pointer-events-none z-10">
                 <button
                     onClick={handleEnterAR}
-                    className="pointer-events-auto px-8 py-4 bg-blue-600 text-white rounded-full font-bold text-lg shadow-lg active:scale-95 transition-transform ring-4 ring-blue-200"
+                    className="pointer-events-auto px-10 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-full font-black text-xl shadow-2xl shadow-purple-500/30 active:scale-95 hover:scale-105 transition-all ring-4 ring-white/30 backdrop-blur-sm"
                 >
-                    Enter AR
+                    ✨ ENTER AR WORLD
                 </button>
             </div>
 
@@ -209,36 +217,50 @@ const DrawingCanvas: React.FC = () => {
 
             {/* Gallery Modal */}
             {showGallery && (
-                <div className="absolute inset-0 bg-black/80 z-50 flex flex-col p-4 pt-16 animate-fade-in">
-                    <button
-                        className="absolute top-4 right-4 text-white text-2xl font-bold p-2 pt-safe pointer-events-auto"
-                        onClick={() => setShowGallery(false)}
-                    >
-                        ✕ Close
-                    </button>
-                    <h2 className="text-white text-xl font-bold mb-4 text-center">Your Saved Drawings</h2>
-
-                    {savedDrawings.length === 0 ? (
-                        <p className="text-gray-400 text-center mt-10">No drawings saved yet.</p>
-                    ) : (
-                        <div className="grid grid-cols-2 gap-4 overflow-y-auto pb-safe">
-                            {savedDrawings.map((img, idx) => (
-                                <div key={idx} className="relative bg-white rounded-lg overflow-hidden aspect-square border-2 border-gray-200">
-                                    <img
-                                        src={img}
-                                        className="w-full h-full object-contain cursor-pointer"
-                                        onClick={() => handleLoad(img)}
-                                    />
-                                    <button
-                                        className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm"
-                                        onClick={() => deleteDrawing(idx)}
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
-                            ))}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white/90 backdrop-blur-xl border border-white/50 rounded-3xl w-full max-w-lg max-h-[80vh] flex flex-col shadow-2xl overflow-hidden pb-safe">
+                        <div className="p-4 flex justify-between items-center border-b border-gray-100">
+                            <h2 className="text-xl font-black text-gray-800 tracking-tight">📁 My Gallery</h2>
+                            <button
+                                className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                                onClick={() => setShowGallery(false)}
+                            >
+                                ✕
+                            </button>
                         </div>
-                    )}
+
+                        <div className="p-4 overflow-y-auto flex-1">
+                            {savedDrawings.length === 0 ? (
+                                <div className="text-center py-20 text-gray-400">
+                                    <p className="text-4xl mb-2">🎨</p>
+                                    <p>No drawings yet.</p>
+                                    <p className="text-xs mt-2">Draw something and hit save!</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 gap-4">
+                                    {savedDrawings.map((img, idx) => (
+                                        <div key={idx} className="group relative bg-white rounded-2xl overflow-hidden aspect-square border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                                            <div
+                                                className="absolute inset-0 bg-gray-50 pattern-grid-lg"
+                                                style={{ backgroundImage: 'radial-gradient(#e5e7eb 1px, transparent 1px)', backgroundSize: '10px 10px' }}
+                                            />
+                                            <img
+                                                src={img}
+                                                className="absolute inset-0 w-full h-full object-contain p-2 cursor-pointer transition-transform group-hover:scale-105"
+                                                onClick={() => handleLoad(img)}
+                                            />
+                                            <button
+                                                className="absolute top-2 right-2 bg-white/80 hover:bg-red-50 text-red-500 w-8 h-8 rounded-full flex items-center justify-center shadow-sm backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                                                onClick={(e) => { e.stopPropagation(); deleteDrawing(idx); }}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

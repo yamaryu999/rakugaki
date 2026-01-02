@@ -92,23 +92,26 @@ const ARScene: React.FC = () => {
     return (
         <div className="w-full h-full relative">
             {/* AR Button Container - Top Right */}
-            <div className="absolute top-4 right-4 z-50 pt-safe">
+            <div className="absolute top-4 right-4 z-50 pt-safe font-sans">
                 <ARButton
                     style={{
-                        position: 'static', // Override default absolute
-                        padding: '8px 16px',
+                        position: 'static',
+                        padding: '12px 24px',
                         borderRadius: '9999px',
-                        backgroundColor: '#2563EB', // blue-600
+                        background: 'linear-gradient(to right, #6366f1, #a855f7, #ec4899)', // indigo-500 -> purple-500 -> pink-500
                         color: 'white',
-                        fontWeight: 'bold',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                        border: 'none',
+                        fontWeight: '800', // Extra bold
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        boxShadow: '0 10px 15px -3px rgba(168, 85, 247, 0.4)',
+                        border: '2px solid rgba(255,255,255,0.3)',
                         fontSize: '14px',
                         width: 'auto',
                         height: 'auto',
+                        backdropFilter: 'blur(4px)',
                     }}
                 >
-                    Start AR
+                    Start Camera
                 </ARButton>
             </div>
 
@@ -126,17 +129,19 @@ const ARScene: React.FC = () => {
                 </XR>
             </Canvas>
 
-            <div className="absolute top-4 left-0 right-0 flex justify-center z-10 pt-safe pointer-events-none">
+            <div className="absolute top-4 left-4 z-10 pt-safe pointer-events-none">
                 <button
                     onClick={() => setMode('drawing')}
-                    className="pointer-events-auto px-4 py-2 bg-white/80 rounded-full font-bold shadow-md active:scale-95 transition-transform"
+                    className="pointer-events-auto px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full font-bold shadow-lg active:scale-95 transition-all hover:bg-white/20 flex items-center gap-2"
                 >
-                    ← Back to Drawing
+                    <span>←</span> <span className="text-sm">Back</span>
                 </button>
             </div>
 
-            <div className="absolute bottom-10 w-full text-center pointer-events-none z-10">
-                <p className="text-white text-sm bg-black/30 inline-block px-2 rounded">Find a surface and tap to place!</p>
+            <div className="absolute bottom-12 w-full text-center pointer-events-none z-10 px-4">
+                <div className="inline-block px-6 py-3 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
+                    <p className="text-white font-medium text-sm">👇 Tap any surface to place your art!</p>
+                </div>
             </div>
         </div>
     );
