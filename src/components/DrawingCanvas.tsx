@@ -45,7 +45,7 @@ const DrawingCanvas: React.FC = () => {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.lineWidth = 5;
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = '#334155'; // Slate-700
     };
 
     const draw = (e: React.MouseEvent | React.TouchEvent) => {
@@ -97,7 +97,7 @@ const DrawingCanvas: React.FC = () => {
         if (!canvas) return;
         const dataUrl = canvas.toDataURL('image/png');
         saveDrawing(dataUrl);
-        alert('Drawing saved to Gallery!');
+        // Toast notification could go here
     };
 
     const handleLoad = (dataUrl: string) => {
@@ -137,7 +137,7 @@ const DrawingCanvas: React.FC = () => {
     };
 
     return (
-        <div className="relative w-full h-full bg-slate-50 overflow-hidden font-sans">
+        <div className="relative w-full h-full bg-slate-50 overflow-hidden font-outfit">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -148,7 +148,7 @@ const DrawingCanvas: React.FC = () => {
 
             <canvas
                 ref={canvasRef}
-                className="block touch-none cursor-crosshair w-full h-full absolute inset-0 z-0 bg-white"
+                className="block touch-none cursor-crosshair w-full h-full absolute inset-0 z-0 bg-transparent"
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
@@ -158,135 +158,109 @@ const DrawingCanvas: React.FC = () => {
                 onTouchEnd={stopDrawing}
             />
 
-            {/* === HEADER === */}
-            <div className="absolute top-0 left-0 right-0 p-4 pt-safe z-10 flex justify-between items-start pointer-events-none">
-                {/* Logo / Title */}
-                <div className="glass-panel px-4 py-2 rounded-full pointer-events-auto shadow-sm">
-                    <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 text-sm tracking-widest uppercase">
-                        RAKUGAKI
-                    </span>
-                </div>
+            {/* === UNIFIED FLOATING CAPSULE === */}
+            <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20 pointer-events-none pb-safe animate-float">
+                <div className="capsule-bar flex items-center gap-1 shadow-soft pointer-events-auto bg-white/95 backdrop-blur-xl border border-white/40 ring-1 ring-black/5">
 
-                {/* Gallery Bundle */}
-                <button
-                    onClick={() => setShowGallery(true)}
-                    className="glass-button px-4 py-2 rounded-full pointer-events-auto shadow-sm flex items-center gap-2 group"
-                >
-                    <span className="text-xl group-hover:scale-110 transition-transform">📁</span>
-                    <span className="text-gray-600 font-bold text-sm">Gallery</span>
-                    {savedDrawings.length > 0 && (
-                        <span className="bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm">
-                            {savedDrawings.length}
-                        </span>
-                    )}
-                </button>
-            </div>
+                    {/* Left: Utilities */}
+                    <button
+                        onClick={() => setShowGallery(true)}
+                        className="w-12 h-12 rounded-full hover:bg-slate-100 flex items-center justify-center text-xl text-slate-600 btn-bouncy relative"
+                    >
+                        📂
+                        {savedDrawings.length > 0 && (
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-400 rounded-full border border-white"></span>
+                        )}
+                    </button>
 
-            {/* === BOTTOM DOCK === */}
-            <div className="absolute bottom-6 left-4 right-4 z-20 pb-safe pointer-events-none flex justify-center items-end">
-                <div className="glass-panel px-6 py-4 rounded-3xl shadow-xl flex items-center gap-8 pointer-events-auto">
-                    {/* Left Tools */}
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => fileInputRef.current?.click()}
-                            className="flex flex-col items-center gap-1 group w-12"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg shadow-sm group-active:scale-95 transition-transform border border-purple-100">
-                                📷
-                            </div>
-                            <span className="text-[10px] text-gray-500 font-medium">Add</span>
-                        </button>
-                        <button
-                            onClick={handleClear}
-                            className="flex flex-col items-center gap-1 group w-12"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-lg shadow-sm group-active:scale-95 transition-transform border border-red-100">
-                                🗑️
-                            </div>
-                            <span className="text-[10px] text-gray-500 font-medium">Clear</span>
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-12 h-12 rounded-full hover:bg-slate-100 flex items-center justify-center text-xl text-slate-600 btn-bouncy"
+                    >
+                        📷
+                    </button>
 
-                    {/* HERO ACTION: AR FAB */}
-                    <div className="relative -top-8">
-                        <div className="absolute inset-0 rounded-full animate-pulse-ring"></div>
+                    {/* Center: PRIMARY AR ACTION */}
+                    <div className="px-2">
                         <button
                             onClick={handleEnterAR}
-                            className="w-20 h-20 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white shadow-2xl flex items-center justify-center flex-col transform active:scale-95 transition-all hover:-translate-y-1 relative z-10 border-4 border-white/50"
+                            className="h-14 px-8 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-extrabold text-lg shadow-lg shadow-purple-500/30 btn-bouncy flex items-center gap-2 hover:brightness-110"
                         >
-                            <span className="text-3xl filter drop-shadow-md">🚀</span>
-                            <span className="text-[10px] font-bold uppercase tracking-wider mt-1">GO AR</span>
+                            <span>🚀</span>
+                            <span className="tracking-widest text-sm">GO AR</span>
                         </button>
                     </div>
 
-                    {/* Right Tools */}
-                    <div className="flex gap-4">
-                        <button
-                            onClick={handleSave}
-                            className="flex flex-col items-center gap-1 group w-12"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg shadow-sm group-active:scale-95 transition-transform border border-green-100">
-                                💾
-                            </div>
-                            <span className="text-[10px] text-gray-500 font-medium">Save</span>
-                        </button>
-                        {/* Placeholder for symmetry or future feature */}
-                        <div className="w-12"></div>
-                    </div>
+                    {/* Right: Canvas Actions */}
+                    <button
+                        onClick={handleClear}
+                        className="w-12 h-12 rounded-full hover:bg-red-50 flex items-center justify-center text-xl text-slate-400 hover:text-red-500 btn-bouncy transition-colors"
+                    >
+                        🗑️
+                    </button>
+
+                    <button
+                        onClick={handleSave}
+                        className="w-12 h-12 rounded-full hover:bg-emerald-50 flex items-center justify-center text-xl text-slate-400 hover:text-emerald-500 btn-bouncy transition-colors"
+                    >
+                        💾
+                    </button>
                 </div>
             </div>
 
-            {/* === GALLERY SHEET (DRAWER) === */}
+            {/* Top Text (Minimal) */}
+            <div className="absolute top-6 left-0 right-0 text-center pointer-events-none pt-safe opacity-30">
+                <h1 className="font-outfit font-black text-2xl tracking-tight text-slate-900 uppercase">Rakugaki</h1>
+            </div>
+
+
+            {/* === MODERN GALLERY OVERLAY === */}
             {showGallery && (
-                <div className="absolute inset-0 z-50 flex flex-col justify-end pointer-events-none">
-                    {/* Backdrop */}
-                    <div
-                        className="absolute inset-0 bg-black/40 backdrop-blur-sm pointer-events-auto transition-opacity duration-300"
-                        onClick={() => setShowGallery(false)}
-                    ></div>
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-6 animate-fade-in bg-slate-900/20 backdrop-blur-sm">
+                    {/* Card Container */}
+                    <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md h-[70vh] flex flex-col overflow-hidden relative border border-white/50 ring-1 ring-black/5">
 
-                    {/* Sheet */}
-                    <div className="bg-slate-50 rounded-t-[2.5rem] p-6 shadow-2xl h-[75vh] w-full pointer-events-auto animate-slide-up relative flex flex-col">
-                        {/* Drag Handle (Visual only) */}
-                        <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-6"></div>
-
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-black text-gray-800">Your Artworks</h2>
+                        {/* Header */}
+                        <div className="p-6 flex justify-between items-center bg-white/50 backdrop-blur-md z-10 sticky top-0">
+                            <div>
+                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">Your Gallery</h2>
+                                <p className="text-slate-400 text-xs font-medium uppercase tracking-wider">{savedDrawings.length} Creations</p>
+                            </div>
                             <button
                                 onClick={() => setShowGallery(false)}
-                                className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold"
+                                className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 btn-bouncy font-bold"
                             >
                                 ✕
                             </button>
                         </div>
 
-                        <div className="overflow-y-auto flex-1 pb-safe">
+                        {/* Bento Grid */}
+                        <div className="flex-1 overflow-y-auto p-6 pt-0">
                             {savedDrawings.length === 0 ? (
-                                <div className="text-center py-20 opacity-50 flex flex-col items-center">
-                                    <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl mb-4">🎨</div>
-                                    <p className="text-lg font-medium text-gray-800">Empty Gallery</p>
-                                    <p className="text-sm text-gray-500">Create new masterpieces to save them here.</p>
+                                <div className="h-full flex flex-col items-center justify-center text-slate-300">
+                                    <span className="text-6xl mb-4 grayscale opacity-50">🎨</span>
+                                    <p className="font-semibold">Gallery is Empty</p>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4 auto-rows-fr">
                                     {savedDrawings.map((img, idx) => (
-                                        <div key={idx} className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 relative group overflow-hidden">
-                                            <div className="aspect-square rounded-xl overflow-hidden bg-gray-50 relative cursor-pointer" onClick={() => handleLoad(img)}>
-                                                <div
-                                                    className="absolute inset-0"
-                                                    style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '8px 8px' }}
-                                                />
-                                                <img src={img} className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110" />
-                                            </div>
-                                            <div className="flex justify-between items-center mt-3 px-1">
-                                                <span className="text-xs font-bold text-gray-400">#{savedDrawings.length - idx}</span>
-                                                <button
-                                                    className="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-full hover:bg-red-100 transition-colors"
-                                                    onClick={(e) => { e.stopPropagation(); deleteDrawing(idx); }}
-                                                >
-                                                    🗑️
-                                                </button>
-                                            </div>
+                                        <div
+                                            key={idx}
+                                            className="group relative rounded-3xl overflow-hidden aspect-square bg-slate-50 shadow-sm border border-slate-100 btn-bouncy cursor-pointer"
+                                            onClick={() => handleLoad(img)}
+                                        >
+                                            {/* Grid Pattern Background */}
+                                            <div className="absolute inset-0 bg-grid-pattern opacity-50" />
+
+                                            <img src={img} className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110" />
+
+                                            {/* Delete Overlay */}
+                                            <button
+                                                className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur text-red-500 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                                                onClick={(e) => { e.stopPropagation(); deleteDrawing(idx); }}
+                                            >
+                                                🗑️
+                                            </button>
                                         </div>
                                     ))}
                                 </div>

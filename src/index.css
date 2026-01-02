@@ -12,7 +12,10 @@ body {
   /* Prevent browser gestures */
   user-select: none;
   -webkit-user-select: none;
-  background-color: transparent;
+  background-color: #F8FAFC;
+  /* Slate-50 base */
+  font-family: 'Outfit', sans-serif;
+  color: #1E293B;
 }
 
 #root {
@@ -32,59 +35,52 @@ body {
   }
 }
 
-/* Animations */
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
+/* --- Modern Animations & Utils --- */
 
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.font-outfit {
+  font-family: 'Outfit', sans-serif;
 }
 
-.animate-slide-up {
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Bouncy Click */
+.btn-bouncy {
+  transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
-  }
+.btn-bouncy:active {
+  transform: scale(0.9) !important;
+}
 
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 20px rgba(168, 85, 247, 0);
-  }
+/* Soft Pop Shadow */
+.shadow-soft {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+}
 
+/* Floating Capsule */
+.capsule-bar {
+  background: white;
+  border-radius: 9999px;
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.2), 0 0 1px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+}
+
+@keyframes float {
+
+  0%,
   100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0);
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
   }
 }
 
-.animate-pulse-ring {
-  animation: pulse-ring 2s infinite;
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }
 
-.glass-panel {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.glass-button {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: all 0.2s ease;
-}
-
-.glass-button:active {
-  transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.8);
+/* Gallery Pattern */
+.bg-grid-pattern {
+  background-image: radial-gradient(#CBD5E1 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
 }
