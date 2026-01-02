@@ -90,7 +90,7 @@ const ARScene: React.FC = () => {
     const doodles = useAppStore((state) => state.doodles);
 
     return (
-        <div className="w-full h-full relative bg-black">
+        <div className="w-full h-full relative bg-transparent">
             {/* Native WebXR Button is required to start session cleanly */}
             <ARButton
                 sessionInit={{
@@ -102,7 +102,7 @@ const ARScene: React.FC = () => {
                 Start Camera
             </ARButton>
 
-            <Canvas>
+            <Canvas gl={{ alpha: true }}>
                 <XR>
                     <ambientLight intensity={1} />
                     <ARController />

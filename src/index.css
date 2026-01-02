@@ -12,6 +12,7 @@ body {
   /* Prevent browser gestures */
   user-select: none;
   -webkit-user-select: none;
+  background-color: transparent;
 }
 
 #root {
