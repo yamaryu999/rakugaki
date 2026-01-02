@@ -91,11 +91,26 @@ const ARScene: React.FC = () => {
 
     return (
         <div className="w-full h-full relative">
-            <ARButton
-                className="absolute top-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-full font-bold shadow-lg z-50 text-sm !important"
-            >
-                Start AR
-            </ARButton>
+            {/* AR Button Container - Top Right */}
+            <div className="absolute top-4 right-4 z-50 pt-safe">
+                <ARButton
+                    style={{
+                        position: 'static', // Override default absolute
+                        padding: '8px 16px',
+                        borderRadius: '9999px',
+                        backgroundColor: '#2563EB', // blue-600
+                        color: 'white',
+                        fontWeight: 'bold',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        border: 'none',
+                        fontSize: '14px',
+                        width: 'auto',
+                        height: 'auto',
+                    }}
+                >
+                    Start AR
+                </ARButton>
+            </div>
 
             <Canvas gl={{ alpha: true }}>
                 <XR>
