@@ -102,7 +102,7 @@ const DrawingCanvas: React.FC = () => {
             />
 
             {/* UI Overlay */}
-            <div className="absolute bottom-12 left-0 right-0 flex flex-wrap justify-center gap-4 pointer-events-none px-4 pb-safe">
+            <div className="absolute top-4 left-0 right-0 flex flex-wrap justify-center gap-4 pointer-events-none px-4 pt-safe">
                 <button
                     onClick={handleClear}
                     className="pointer-events-auto px-6 py-3 bg-red-100 text-red-600 rounded-full font-bold shadow-lg active:scale-95 transition-transform"
@@ -117,7 +117,7 @@ const DrawingCanvas: React.FC = () => {
                 </button>
             </div>
 
-            <div className="absolute top-4 left-4 pointer-events-none">
+            <div className="absolute bottom-4 left-4 pointer-events-none pb-safe">
                 <p className="text-gray-400 text-sm">Draw something!</p>
             </div>
         </div>
