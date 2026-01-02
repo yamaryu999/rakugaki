@@ -90,19 +90,12 @@ const ARScene: React.FC = () => {
     const doodles = useAppStore((state) => state.doodles);
 
     return (
-        <div className="w-full h-full relative bg-transparent">
-            {/* Native WebXR Button is required to start session cleanly */}
+        <div className="w-full h-full relative">
             <ARButton
-                sessionInit={{
-                    requiredFeatures: ['hit-test', 'dom-overlay'],
-                    domOverlay: { root: document.getElementById('ar-overlay')! }
-                }}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-4 bg-blue-600 text-white rounded-full font-bold shadow-lg z-50 !important"
-            >
-                Start Camera
-            </ARButton>
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-4 bg-blue-600 text-white rounded-full font-bold shadow-lg z-50"
+            />
 
-            <Canvas gl={{ alpha: true }}>
+            <Canvas>
                 <XR>
                     <ambientLight intensity={1} />
                     <ARController />
@@ -116,20 +109,17 @@ const ARScene: React.FC = () => {
                 </XR>
             </Canvas>
 
-            {/* DOM Overlay Container */}
-            <div id="ar-overlay" className="absolute inset-0 pointer-events-none z-10">
-                <div className="absolute top-4 left-0 right-0 flex justify-center pt-safe pointer-events-none">
-                    <button
-                        onClick={() => setMode('drawing')}
-                        className="pointer-events-auto px-4 py-2 bg-white/80 rounded-full font-bold shadow-md active:scale-95 transition-transform"
-                    >
-                        ← Back to Drawing
-                    </button>
-                </div>
+            <div className="absolute top-4 left-0 right-0 flex justify-center z-10 pt-safe pointer-events-none">
+                <button
+                    onClick={() => setMode('drawing')}
+                    className="pointer-events-auto px-4 py-2 bg-white/80 rounded-full font-bold shadow-md active:scale-95 transition-transform"
+                >
+                    ← Back to Drawing
+                </button>
+            </div>
 
-                <div className="absolute bottom-10 w-full text-center pointer-events-none">
-                    <p className="text-white text-sm bg-black/30 inline-block px-2 rounded">Find a surface and tap to place!</p>
-                </div>
+            <div className="absolute bottom-10 w-full text-center pointer-events-none z-10">
+                <p className="text-white text-sm bg-black/30 inline-block px-2 rounded">Find a surface and tap to place!</p>
             </div>
         </div>
     );
