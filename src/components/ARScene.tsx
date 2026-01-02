@@ -115,10 +115,10 @@ const ARScene: React.FC = () => {
                 </XR>
             </Canvas>
 
-            <div className="absolute top-4 left-4 z-10">
+            <div className="absolute top-12 left-4 z-10 pt-safe">
                 <button
                     onClick={() => setMode('drawing')}
-                    className="px-4 py-2 bg-white/80 rounded-full font-bold shadow-md"
+                    className="px-4 py-2 bg-white/80 rounded-full font-bold shadow-md active:scale-95 transition-transform"
                 >
                     ← Back to Drawing
                 </button>
